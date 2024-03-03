@@ -64,6 +64,7 @@ public class AuthenticationController : ControllerBase
     private UserData? ValidateCredentials(AuthenticationData data)
     {
         // THIS IS NOT PRODUCTION CODE - THIS IS ONLY A DEMO - DO NOT USE IN REAL LIFE
+        // Replace with call to Azure AD or similar
         if (CompareValues(data.UserName, "ndangelo") &&
             CompareValues(data.Password, "Test123"))
         {
