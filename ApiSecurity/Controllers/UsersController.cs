@@ -25,7 +25,6 @@ public class UsersController : ControllerBase
 
     // GET api/<UsersController>/5
     [HttpGet("{id}")]
-    [Authorize]
     public string Get(int id)
     {
         return _config.GetConnectionString("Default");

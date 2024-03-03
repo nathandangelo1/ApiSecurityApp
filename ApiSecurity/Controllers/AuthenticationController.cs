@@ -19,7 +19,8 @@ public class AuthenticationController : ControllerBase
         this._config = config;
     }
     public record AuthenticationData(string? UserName, string? Password);
-    public record UserData(int UserId, string UserName);
+    
+    public record UserData(int UserId, string UserName, string Title, string EmployeeId);
 
     // api/Authentication/token
    [HttpPost("token")]
@@ -47,8 +48,12 @@ public class AuthenticationController : ControllerBase
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256 );
 
         List<Claim> claims = new();
+        // standard claims
         claims.Add(new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()));
         claims.Add(new(JwtRegisteredClaimNames.UniqueName, user.UserName));
+        // Custom Claims (lowercase to follow javascipt/json/jwt standard)
+        claims.Add(new("title", user.Title));
+        claims.Add(new("employeeId", user.EmployeeId));
 
         var token = new JwtSecurityToken(
             _config.GetValue<string>("Authentication:Issuer"),
@@ -68,12 +73,12 @@ public class AuthenticationController : ControllerBase
         if (CompareValues(data.UserName, "ndangelo") &&
             CompareValues(data.Password, "Test123"))
         {
-            return new UserData(1, data.UserName!);
+            return new UserData(1, data.UserName!, "BusinessOwner", "E001");
         }
         if (CompareValues(data.UserName, "tcorey") &&
             CompareValues(data.Password, "Test123"))
         {
-            return new UserData(2, data.UserName!);
+            return new UserData(2, data.UserName!, "Head of Security", "E005");
         }
         return null;
     }
