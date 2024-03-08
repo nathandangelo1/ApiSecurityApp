@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -24,6 +25,7 @@ public class AuthenticationController : ControllerBase
 
     // api/Authentication/token
    [HttpPost("token")]
+    [AllowAnonymous]
     public ActionResult<string> Authenticate([FromBody] AuthenticationData data)
     {
         var user = ValidateCredentials(data);
@@ -47,20 +49,22 @@ public class AuthenticationController : ControllerBase
 
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256 );
 
-        List<Claim> claims = new();
-        // standard claims
-        claims.Add(new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()));
-        claims.Add(new(JwtRegisteredClaimNames.UniqueName, user.UserName));
-        // Custom Claims (lowercase to follow javascipt/json/jwt standard)
-        claims.Add(new("title", user.Title));
-        claims.Add(new("employeeId", user.EmployeeId));
+        List<Claim> claims = new()
+        {
+            // standard claims
+            new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+            new(JwtRegisteredClaimNames.UniqueName, user.UserName),
+            // Custom Claims (lowercase to follow javascipt/json/jwt standard)
+            new("title", user.Title),
+            new("employeeId", user.EmployeeId)
+        };
 
         var token = new JwtSecurityToken(
             _config.GetValue<string>("Authentication:Issuer"),
             _config.GetValue<string>("Authentication:Audience"),
             claims,
             DateTime.UtcNow, // When this token becomes valid
-            DateTime.UtcNow.AddMinutes(1), // When the token will expire
+            DateTime.UtcNow.AddMinutes(5), // When the token will expire
             signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

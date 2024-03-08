@@ -1,3 +1,4 @@
+global using Policies = ApiSecurity.Constants.PolicyConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -10,12 +11,29 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy(Policies.MustHaveEmployeeId, policy =>
+    {
+        policy.RequireClaim("employeeId");
+    });
+    options.AddPolicy(Policies.MustBeTheOwner, policy =>
+    {
+        //policy.RequireUserName("ndangelo");
+        policy.RequireClaim("title", "BusinessOwner");
+    });
+    options.AddPolicy(Policies.MustBeAVeteranEmployee, policy =>
+    {
+        //policy.RequireUserName("ndangelo");
+        policy.RequireClaim("employeeId", "E001", "E002", "E003");
+    });
+    // Sets Fallback policy, applies to all endpoints unless specific rules overwrite it (such as [AllowAnonymous] on api/Authentication/token endpoint to allow users access to authenticate
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
 });
+
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(opts =>
     {
