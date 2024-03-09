@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace ApiSecurity.Builders;
+namespace WebApi.Builders;
 
 public class Authorization
 {

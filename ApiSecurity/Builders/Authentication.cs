@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace ApiSecurity.Builders
+namespace WebApi.Builders
 {
     public class Authentication
     {

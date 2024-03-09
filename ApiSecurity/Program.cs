@@ -1,8 +1,8 @@
-global using Policies = ApiSecurity.Constants.PolicyConstants;
+global using Policies = WebApi.Constants.PolicyConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ApiSecurity.Builders;
+using WebApi.Builders;
 //using ApiSecurity.Services;
 
 var builder = WebApplication.CreateBuilder(args);

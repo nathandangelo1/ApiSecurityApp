@@ -1,4 +1,4 @@
-﻿namespace ApiSecurity.Constants
+﻿namespace WebApi.Constants
 {
     public static class PolicyConstants
     {
