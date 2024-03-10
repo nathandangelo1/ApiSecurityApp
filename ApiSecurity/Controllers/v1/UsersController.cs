@@ -5,27 +5,29 @@ using System.Security.Cryptography;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace WebApi.Controllers;
+namespace WebApi.Controllers.v1;
 
-[Route("api/[controller]")]
+//[Route("api/v1/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[ApiVersion("1.0")]
 public class UsersController : ControllerBase
 {
     private readonly IConfiguration _config;
 
     public UsersController(IConfiguration config)
     {
-        this._config = config;
+        _config = config;
     }
 
-    // GET: api/<UsersController>
+    // GET: api/v1/<UsersController>
     [HttpGet]
     public IEnumerable<string> Get()
     {
         return new string[] { "value1", "value2" };
     }
 
-    // GET api/<UsersController>/5
+    // GET api//v1/<UsersController>/5
     [HttpGet("{id}")]
     [Authorize(Policy = Policies.MustHaveEmployeeId)]
     [Authorize(Policy = Policies.MustBeAVeteranEmployee)]
@@ -34,19 +36,19 @@ public class UsersController : ControllerBase
         return _config.GetConnectionString("Default");
     }
 
-    // POST api/<UsersController>
+    // POST api/v1/<UsersController>
     [HttpPost]
     public void Post([FromBody] string value)
     {
     }
 
-    // PUT api/<UsersController>/5
+    // PUT api/v1/<UsersController>/5
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] string value)
     {
     }
 
-    // DELETE api/<UsersController>/5
+    // DELETE api/v1/<UsersController>/5
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
