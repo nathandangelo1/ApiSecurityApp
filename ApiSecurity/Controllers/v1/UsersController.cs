@@ -5,10 +5,12 @@ using System.Security.Cryptography;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace WebApi.Controllers;
+namespace WebApi.Controllers.v1;
 
-[Route("api/[controller]")]
+
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[ApiVersion("1.0")]
 public class UsersController : ControllerBase
 {
     private readonly IConfiguration _config;
@@ -18,11 +20,11 @@ public class UsersController : ControllerBase
         this._config = config;
     }
 
-    // GET: api/<UsersController>
+    // GET: api/v2/users
     [HttpGet]
     public IEnumerable<string> Get()
     {
-        return new string[] { "value1", "value2" };
+        return new string[] { "version 1 value1", "version 1 value2" };
     }
 
     // GET api/<UsersController>/5
