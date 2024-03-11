@@ -9,8 +9,9 @@ using System.Text;
 
 namespace WebApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[ApiVersionNeutral]
 public class AuthenticationController : ControllerBase
 {
     private readonly IConfiguration _config;
